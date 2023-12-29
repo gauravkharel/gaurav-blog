@@ -1,9 +1,9 @@
 import { Client } from '@notionhq/client';
-import { cache } from 'react';
-
+import { type } from 'os';
+import {cache} from 'react'
 export const revalidate = 3600; // revalidate the data at most every hour
 
-const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId: string | undefined = process.env.NOTION_DATABASE_ID;
 
 /**
  * Returns a random integer between the specified values, inclusive.
@@ -13,7 +13,14 @@ const databaseId = process.env.NOTION_DATABASE_ID;
  * @param {number} maximum - The largest integer value that can be returned, inclusive.
  * @returns {number} - A random integer between `min` and `max`, inclusive.
  */
-function getRandomInt(minimum, maximum) {
+type Values = {
+  minimum: number,
+  maximum: number,
+  blockId: string,
+  pageId: string
+}
+
+function getRandomInt({minimum, maximum}: Values) {
   const min = Math.ceil(minimum);
   const max = Math.floor(maximum);
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -23,6 +30,8 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
+
+
 export const getDatabase = cache(async () => {
   const response = await notion.databases.query({
     database_id: databaseId,
@@ -30,7 +39,7 @@ export const getDatabase = cache(async () => {
   return response.results;
 });
 
-export const getPage = cache(async (pageId) => {
+export const getPage = cache(async ({pageId}: Values) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
   return response;
 });

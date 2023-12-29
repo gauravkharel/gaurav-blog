@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Text from "@/components/text";
-import { getDatabase } from "@/lib/notion";
+import Text from "../../components/Text";
+import { getDatabase } from "../../lib/notion"
 
 export const databaseId =
   process.env?.NOTION_DATABASE_ID ?? "NOTION_DATABASE_ID";
@@ -19,7 +19,7 @@ export default async function Home() {
     <div>
       <h2>All Posts</h2>
       <ol>
-        {posts.map((post) => {
+        {posts.map((post:any) => {
           const date = new Date(post.last_edited_time).toLocaleString("en-US", {
             month: "short",
             day: "2-digit",
