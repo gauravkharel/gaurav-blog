@@ -25,7 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="px-4  sm:px-[450px] ">
+          <div className="px-4 sm:px-8 md:px-10 lg:px-[500px] xl:px-[00px] 2xl:px-[1200px]">
             <Navbar />
             {children}
           </div>

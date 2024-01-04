@@ -1,25 +1,31 @@
 import Link from "next/link";
 import Text from "../../components/Text";
 import { getDatabase } from "../../lib/notion"
+import Title from "../../components/Title";
+import { Input } from "../../components/ui/Input";
 
 export const databaseId =
   process.env?.NOTION_DATABASE_ID ?? "NOTION_DATABASE_ID";
 
 async function getPosts() {
   const database = await getDatabase();
-
   return database;
 }
 
 export default async function Home() {
   const posts = await getPosts();
-  console.log(posts[1])
 
   return (
-    <div>
-      <h2>All Posts</h2>
-      <ol>
-        {posts.map((post:any) => {
+    <div className="mx-10 mt-10">
+      <div>
+        <Title props="Blog" isPrimary={true} />
+        <Title props="I write about CSS, animation techniques, design systems and more." isPrimary={false} />
+      </div>
+      <div className="my-4 w-[400px]">
+        <Input type="text" placeholder="Search.." className="border-rounded text-lg font-medium" />
+      </div>
+      <ol className="mt-[80px]">
+        {posts.map((post: any) => {
           const date = new Date(post.last_edited_time).toLocaleString("en-US", {
             month: "short",
             day: "2-digit",
@@ -27,15 +33,15 @@ export default async function Home() {
           });
           const slug = post.properties?.Slug?.rich_text[0].text.content;
           return (
-            <li key={post.id}>
+            <li key={post.id} className="flex gap-8 mt-4 ">
+              <p className="text-slate-400">{date}</p>
               <h3>
-                <Link href={`/article/${slug}`}>
+                <Link href={`/blog/${slug}`}>
                   <Text title={post.properties?.Name.title} />
                 </Link>
               </h3>
 
-              <p>{date}</p>
-              <Link href={`/blog/${slug}`}>Read post →</Link>
+              <Link hidden href={`/blog/${slug}`}>Read post →</Link>
             </li>
           );
         })}

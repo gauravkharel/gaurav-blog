@@ -3,7 +3,7 @@ import { type } from 'os';
 import {cache} from 'react'
 export const revalidate = 3600; // revalidate the data at most every hour
 
-const databaseId: string | undefined = process.env.NOTION_DATABASE_ID;
+const databaseId = process.env.NOTION_DATABASE_ID;
 
 /**
  * Returns a random integer between the specified values, inclusive.
@@ -59,6 +59,7 @@ export const getPageFromSlug = cache(async (slug) => {
   if (response?.results?.length) {
     return response?.results?.[0];
   }
+  console.log('Response: ' + response)
   return {};
 });
 

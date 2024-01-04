@@ -7,7 +7,6 @@ export default function Text({ title }) {
       annotations: { bold, code, color, italic, strikethrough, underline },
       text,
     } = value;
-    console.log('hi')
     return (
       <span key={text.content}>
         {text.link ? <a href={text.link.url}>{text.content}</a> : text.content}

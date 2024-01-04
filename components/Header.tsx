@@ -16,13 +16,16 @@ const Navbar = () => {
   const pathname = usePathname()
   return (
     <header className="py-2 sticky dark:bg-slate-500">
-      <nav className="flex flex-row justify-between md:gap-4 ">
-        <Image alt="logo" width={24} height={24} src="/logo.svg" />
-        <ul className="flex flex-row gap-6 py-1 text-lg  ">
+      <nav
+      className="container mx-auto flex justify-between items-center" 
+      // className="flex flex-row justify-between md:gap-4 "
+      >
+        <Image className=" " alt="logo" width={24} height={24} src="/logo.svg" />
+        <ul className="hidden md:flex space-x-4">
           {links.map((link) => {
             const isActive = pathname.startsWith(link.href)
             return (
-              <li key={link.href} className={`px-4 py-2 rounded-2xl bg-gray-50 hover:bg-gray-200 ${isActive ? "bg-slate-200": 'bg-gray-50'} `}>
+              <li key={link.href} className={`px-4 py-2 font-medium rounded-2xl hover:text-slate-500 ${isActive ? "bg-slate-100 text-slate-500": ' text-slate-300'} `}>
                 <Link className="dark:text-pink-100 " href={link.href}>
                   {link.name}
                 </Link>
