@@ -1,4 +1,6 @@
+import Image from "next/image"
 import Title from "../../components/Title"
+import profile from '../../public/bg.jpg'
 
 interface pageProps {
 
@@ -15,14 +17,38 @@ const techstacks = [
   { name: 'Express', href: '' },
 ]
 
+const selectedProjects = [
+  {
+    timeline: '2021 - 2022',
+    project_title: 'Tathya',
+    desc: 'I currently work at Bitrefill, mainly focusing on search & discovery.I also lead design & development of the design system.',
+    project_url: "current.com",
+    image_url: profile
+  },
+  {
+    timeline: '2021 - 2022',
+    project_title: 'Tathya',
+    desc: 'I currently work at Bitrefill, mainly focusing on search & discovery.I also lead design & development of the design system.',
+    project_url: "current.com",
+    image_url: profile 
+  },
+  {
+    timeline: '2021 - 2022',
+    project_title: 'Tathya',
+    desc: 'I currently work at Bitrefill, mainly focusing on search & discovery.I also lead design & development of the design system.',
+    project_url: "current.com",
+    image_url: profile
+  }
+]
+
 const page = ({ }) => {
   return (
-    <div>
-      <div className=" py-2 ">
+    <div className="px-[120px]">
+      <section className="py-3">
         <Title props="Gaurav Kharel" isPrimary={true} />
         <Title props="I write & build interfaces" isPrimary={false}></Title>
-      </div>
-      <div className="py-2">
+      </section>
+      <section className="py-3">
         <Title props="Tech Stacks" isPrimary={true} />
         <ul className="flex flex-row gap-4 flex-wrap">
           {techstacks.map((stack) => {
@@ -33,7 +59,34 @@ const page = ({ }) => {
             )
           })}
         </ul>
-      </div>
+      </section>
+
+      <section className="text-xl py-3">
+        <Title props="Selected Projects" isPrimary={true} />
+
+        {selectedProjects.map(project =>
+        (
+          (<div key={project.project_title} className="flex gap-4 py-2">
+            <span>{project.timeline}</span>
+            <div>
+              <Title isPrimary={true} props={project.project_title}></Title>
+              <span className="text-gray-600">{project.desc}</span>
+              <br />
+              <a href={project.project_url} className="underline py-4">Read more about it here.</a>
+              <Image className="rounded" src={project.image_url} alt={project.project_title} width={400} height={250} />
+            </div>
+          </div>)
+        )
+        )
+        }
+      </section>
+
+      <section>
+        <Title props="Selected articles" isPrimary={true} />
+        
+
+      </section>
+
     </div>
   )
 }

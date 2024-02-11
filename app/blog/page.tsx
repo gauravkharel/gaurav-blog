@@ -14,7 +14,6 @@ async function getPosts() {
 
 export default async function Home() {
   const posts = await getPosts();
-
   return (
     <div className="mx-10 mt-10">
       <div>
@@ -25,27 +24,29 @@ export default async function Home() {
         <Input type="text" placeholder="Search.." className="border-rounded text-lg font-medium" />
       </div>
       <ol className="mt-[80px]">
-        {posts.map((post: any) => {
-          const date = new Date(post.last_edited_time).toLocaleString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          });
-          const slug = post.properties?.Slug?.rich_text[0].text.content;
-          return (
-            <li key={post.id} className="flex gap-8 mt-4 ">
-              <p className="text-slate-400">{date}</p>
-              <h3>
-                <Link href={`/blog/${slug}`}>
-                  <Text title={post.properties?.Name.title} />
-                </Link>
-              </h3>
-
-              <Link hidden href={`/blog/${slug}`}>Read post →</Link>
-            </li>
-          );
-        })}
+        {posts
+          .map((post: any) => {
+            const date = new Date(post.last_edited_time).toLocaleString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            });
+            const slug = post.properties?.Slug?.rich_text[0].text.content;
+            return (
+              <li key={post.id} className="flex gap-8 mt-4 ">
+                <p className="text-slate-400">{date}</p>
+                <h3>
+                  <Link href={`/blog/${slug}`}>
+                    <Text title={post.properties?.Name.title} />
+                  </Link>
+                </h3>
+                <Link hidden href={`/blog/${slug}`}>Read post →</Link>
+              </li>
+            );
+          })}
       </ol>
     </div>
   );
 }
+
+

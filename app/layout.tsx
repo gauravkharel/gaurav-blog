@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Gaurav Kharel - Develop Interfaces',
-  description: 'Develop Interfaces',
+  description: 'Developing Interfaces',
   content: 'width=device-width',
   initialscale: "1.0" 
 }
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="px-4 sm:px-8 md:px-10 lg:px-[500px] xl:px-[00px] 2xl:px-[1200px]">
+          <div className="px-[500px] ">
             <Navbar />
             {children}
           </div>
@@ -34,3 +34,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
     </html>
   )
 }
+
+
+// px-4 sm:px-8 md:px-10 lg:px-[500px] xl:px-[00px] 2xl:px-[1200px]

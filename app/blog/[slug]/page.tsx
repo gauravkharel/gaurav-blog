@@ -3,24 +3,23 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 import {
-  getDatabase, getBlocks, getPageFromSlug,
+  getDatabase, getBlocks, getPageFromSlug
 } from '../../../lib/notion';
 import Text from '../../../components/Text';
 import { renderBlock } from '../../../components/notion/Renderer';
 import styles from '../../../styles/post.module.css';
 
 // Return a list of `params` to populate the [slug] dynamic segment
-export async function generateStaticParams() {
-  const database = await getDatabase();
-  return database?.map((page) => {
-    const slug = page.properties.Slug?.formula?.string;
-    return ({ id: page.id, slug });
-  });
-}
+// export async function generateStaticParams() {
+//   const database = await getDatabase();
+//   return database?.map((page) => {
+//     const slug = page.properties.Slug?.formula?.string;
+//     return ({ id: page.id, slug });
+//   });
+// }
 
 export default async function Page({ params }) {
   const page = await getPageFromSlug(params?.slug);
-  console.log("what is" + page)
   const blocks = await getBlocks(page?.id);
 
   if (!page || !blocks) {

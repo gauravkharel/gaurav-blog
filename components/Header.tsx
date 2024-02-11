@@ -17,10 +17,10 @@ const Navbar = () => {
   return (
     <header className="py-2 sticky dark:bg-slate-500">
       <nav
-      className="container mx-auto flex justify-between items-center" 
+      className="container mx-auto flex justify-between items-center " 
       // className="flex flex-row justify-between md:gap-4 "
       >
-        <Image className=" " alt="logo" width={24} height={24} src="/logo.svg" />
+        <Image alt="logo" width={24} height={24} src="/logo.svg" />
         <ul className="hidden md:flex space-x-4">
           {links.map((link) => {
             const isActive = pathname.startsWith(link.href)

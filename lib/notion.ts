@@ -1,6 +1,6 @@
-import { Client } from '@notionhq/client';
-import { type } from 'os';
-import {cache} from 'react'
+import { Client } from "@notionhq/client";
+import { type } from "os";
+import { cache } from "react";
 export const revalidate = 3600; // revalidate the data at most every hour
 
 const databaseId = process.env.NOTION_DATABASE_ID;
@@ -14,13 +14,13 @@ const databaseId = process.env.NOTION_DATABASE_ID;
  * @returns {number} - A random integer between `min` and `max`, inclusive.
  */
 type Values = {
-  minimum: number,
-  maximum: number,
-  blockId: string,
-  pageId: string
-}
+  minimum: number;
+  maximum: number;
+  blockId: string;
+  pageId: string;
+};
 
-function getRandomInt({minimum, maximum}: Values) {
+function getRandomInt({ minimum, maximum }: Values) {
   const min = Math.ceil(minimum);
   const max = Math.floor(maximum);
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -30,8 +30,6 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-
-
 export const getDatabase = cache(async () => {
   const response = await notion.databases.query({
     database_id: databaseId,
@@ -39,7 +37,7 @@ export const getDatabase = cache(async () => {
   return response.results;
 });
 
-export const getPage = cache(async ({pageId}: Values) => {
+export const getPage = cache(async ({ pageId }: Values) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
   return response;
 });
@@ -48,7 +46,7 @@ export const getPageFromSlug = cache(async (slug) => {
   const response = await notion.databases.query({
     database_id: databaseId,
     filter: {
-      property: 'Slug',
+      property: "Slug",
       formula: {
         string: {
           equals: slug,
@@ -59,12 +57,35 @@ export const getPageFromSlug = cache(async (slug) => {
   if (response?.results?.length) {
     return response?.results?.[0];
   }
-  console.log('Response: ' + response)
   return {};
 });
 
+
+export const searchPages = cache(async (query) => {
+  const response = await notion.databases.query({
+    filter: {
+      and: [
+        {
+          property: "Name",
+          formula: {
+            string: {
+              equals: query,
+            },
+          },
+        },
+      ],
+    },
+    sort: {
+      direction: "ascending",
+      timestamp: "last_edited_time",
+    },
+  });
+  console.log("Response :" + response);
+});
+
+
 export const getBlocks = cache(async (blockID) => {
-  const blockId = blockID.replaceAll('-', '');
+  const blockId = blockID.replaceAll("-", "");
 
   const { results } = await notion.blocks.children.list({
     block_id: blockId,
@@ -82,30 +103,32 @@ export const getBlocks = cache(async (blockID) => {
     return block;
   });
 
-  return Promise.all(childBlocks).then((blocks) => blocks.reduce((acc, curr) => {
-    if (curr.type === 'bulleted_list_item') {
-      if (acc[acc.length - 1]?.type === 'bulleted_list') {
-        acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
+  return Promise.all(childBlocks).then((blocks) =>
+    blocks.reduce((acc, curr) => {
+      if (curr.type === "bulleted_list_item") {
+        if (acc[acc.length - 1]?.type === "bulleted_list") {
+          acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
+        } else {
+          acc.push({
+            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
+            type: "bulleted_list",
+            bulleted_list: { children: [curr] },
+          });
+        }
+      } else if (curr.type === "numbered_list_item") {
+        if (acc[acc.length - 1]?.type === "numbered_list") {
+          acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
+        } else {
+          acc.push({
+            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
+            type: "numbered_list",
+            numbered_list: { children: [curr] },
+          });
+        }
       } else {
-        acc.push({
-          id: getRandomInt(10 ** 99, 10 ** 100).toString(),
-          type: 'bulleted_list',
-          bulleted_list: { children: [curr] },
-        });
+        acc.push(curr);
       }
-    } else if (curr.type === 'numbered_list_item') {
-      if (acc[acc.length - 1]?.type === 'numbered_list') {
-        acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
-      } else {
-        acc.push({
-          id: getRandomInt(10 ** 99, 10 ** 100).toString(),
-          type: 'numbered_list',
-          numbered_list: { children: [curr] },
-        });
-      }
-    } else {
-      acc.push(curr);
-    }
-    return acc;
-  }, []));
+      return acc;
+    }, [])
+  );
 });
