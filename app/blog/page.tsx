@@ -18,7 +18,7 @@ export default async function Home() {
     <div className="mx-10 mt-10">
       <div>
         <Title props="Blog" isPrimary={true} />
-        <Title props="I write about CSS, animation techniques, design systems and more." isPrimary={false} />
+        <Title props="I write about websites, books I read, productivity hacks and my favorite RANTS." isPrimary={false} />
       </div>
       <div className="my-4 w-[400px]">
         <Input type="text" placeholder="Search.." className="border-rounded text-lg font-medium" />

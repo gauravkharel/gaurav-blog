@@ -6,8 +6,8 @@ interface TitleProps {
 
 const Title = ({ props, isPrimary }: TitleProps) => {
   return (
-    <h1 className={` antialiased first-letter:uppercase ${isPrimary ? "text-2xl text-black" : "text-xl text-slate-400"} `}>{props}</h1>
-  )
+    <h1 className={` antialiased under first-letter:uppercase font-bold pb-2 lg:pb-4 ${isPrimary ? "text-black dark:text-white" : "dark:text-slate-200 text-slate-400"} `}>{props}</h1>
+  ) 
 }
 
 export default Title

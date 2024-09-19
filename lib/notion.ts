@@ -3,7 +3,7 @@ import { type } from "os";
 import { cache } from "react";
 export const revalidate = 3600; // revalidate the data at most every hour
 
-const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseId  = process.env.NOTION_DATABASE_ID!
 
 /**
  * Returns a random integer between the specified values, inclusive.
@@ -42,7 +42,7 @@ export const getPage = cache(async ({ pageId }: Values) => {
   return response;
 });
 
-export const getPageFromSlug = cache(async (slug) => {
+export const getPageFromSlug = cache(async (slug:string) => {
   const response = await notion.databases.query({
     database_id: databaseId,
     filter: {
@@ -61,7 +61,7 @@ export const getPageFromSlug = cache(async (slug) => {
 });
 
 
-export const searchPages = cache(async (query) => {
+export const searchPages = cache(async (query:string) => {
   const response = await notion.databases.query({
     filter: {
       and: [
@@ -78,7 +78,7 @@ export const searchPages = cache(async (query) => {
     sort: {
       direction: "ascending",
       timestamp: "last_edited_time",
-    },
+    }
   });
   console.log("Response :" + response);
 });
@@ -110,7 +110,7 @@ export const getBlocks = cache(async (blockID) => {
           acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
         } else {
           acc.push({
-            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
+            id: getRandomInt(10 ** 99,10 ** 100).toString(),
             type: "bulleted_list",
             bulleted_list: { children: [curr] },
           });

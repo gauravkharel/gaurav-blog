@@ -18,14 +18,14 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className} >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <div className="px-[500px] ">
+          <div className="px:4 md:px-[500px] text-sm md:text-md lg:text-lg">
             <Navbar />
             {children}
           </div>
