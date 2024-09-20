@@ -3,11 +3,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 import {
-  getDatabase, getBlocks, getPageFromSlug
+  getBlocks, getPageFromSlug
 } from '../../../lib/notion';
 import Text from '../../../components/Text';
 import { renderBlock } from '../../../components/notion/Renderer';
 import styles from '../../../styles/post.module.css';
+import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 // Return a list of `params` to populate the [slug] dynamic segment
 // export async function generateStaticParams() {
@@ -18,8 +19,11 @@ import styles from '../../../styles/post.module.css';
 //   });
 // }
 
+
+//@ts-ignore
 export default async function Page({ params }) {
   const page = await getPageFromSlug(params?.slug);
+  //@ts-ignore
   const blocks = await getBlocks(page?.id);
 
   if (!page || !blocks) {
@@ -29,15 +33,18 @@ export default async function Page({ params }) {
   return (
     <div>
       <Head>
-        <title>{page.properties.Title?.title[0].plain_text}</title>
+        {/* @ts-ignore */}
+        <title className='text-xl font-medium'>{page.properties.Title?.title[0].plain_text}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <article className={styles.container}>
         <h1 className={styles.name}>
+          {/* @ts-ignore */}
           <Text title={page.properties.Title?.title} />
         </h1>
         <section>
+          {/* @ts-ignore */}
           {blocks.map((block) => (
             <Fragment key={block.id}>{renderBlock(block)}</Fragment>
           ))}

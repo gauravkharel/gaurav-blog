@@ -1,9 +1,10 @@
 import { Client } from "@notionhq/client";
-import { type } from "os";
+import type { BlockObjectRequest, BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints"
+
 import { cache } from "react";
 export const revalidate = 3600; // revalidate the data at most every hour
 
-const databaseId  = process.env.NOTION_DATABASE_ID!
+const databaseId = process.env.NOTION_DATABASE_ID!
 
 /**
  * Returns a random integer between the specified values, inclusive.
@@ -30,6 +31,8 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
+
+
 export const getDatabase = cache(async () => {
   const response = await notion.databases.query({
     database_id: databaseId,
@@ -42,7 +45,7 @@ export const getPage = cache(async ({ pageId }: Values) => {
   return response;
 });
 
-export const getPageFromSlug = cache(async (slug:string) => {
+export const getPageFromSlug = cache(async (slug: string) => {
   const response = await notion.databases.query({
     database_id: databaseId,
     filter: {
@@ -61,29 +64,29 @@ export const getPageFromSlug = cache(async (slug:string) => {
 });
 
 
-export const searchPages = cache(async (query:string) => {
-  const response = await notion.databases.query({
-    filter: {
-      and: [
-        {
-          property: "Name",
-          formula: {
-            string: {
-              equals: query,
-            },
-          },
-        },
-      ],
-    },
-    sort: {
-      direction: "ascending",
-      timestamp: "last_edited_time",
-    }
-  });
-  console.log("Response :" + response);
-});
+// export const searchPages = cache(async (query:string) => {
+//   const response = await notion.databases.query({
+//     filter: {
+//       and: [
+//         {
+//           property: "Name",
+//           formula: {
+//             string: {
+//               equals: query,
+//             },
+//           },
+//         },
+//       ],
+//     },
+//     sort: {
+//       direction: "ascending",
+//       timestamp: "last_edited_time",
+//     }
+//   });
+//   console.log("Response :" + response);
+// });
 
-
+//@ts-ignore
 export const getBlocks = cache(async (blockID) => {
   const blockId = blockID.replaceAll("-", "");
 
@@ -95,8 +98,11 @@ export const getBlocks = cache(async (blockID) => {
   // Fetches all child blocks recursively
   // be mindful of rate limits if you have large amounts of nested blocks
   // See https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
+  //@ts-ignore
   const childBlocks = results.map(async (block) => {
+    //@ts-ignore
     if (block.has_children) {
+      //@ts-ignore
       const children = await getBlocks(block.id);
       return { ...block, children };
     }
@@ -110,7 +116,8 @@ export const getBlocks = cache(async (blockID) => {
           acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
         } else {
           acc.push({
-            id: getRandomInt(10 ** 99,10 ** 100).toString(),
+            //@ts-ignore
+            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
             type: "bulleted_list",
             bulleted_list: { children: [curr] },
           });
@@ -120,6 +127,7 @@ export const getBlocks = cache(async (blockID) => {
           acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
         } else {
           acc.push({
+            //@ts-ignore
             id: getRandomInt(10 ** 99, 10 ** 100).toString(),
             type: "numbered_list",
             numbered_list: { children: [curr] },

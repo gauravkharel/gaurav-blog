@@ -4,7 +4,8 @@ import Link from 'next/link';
 import Text from '../Text';
 import styles from '../../styles/post.module.css';
 
-export function renderBlock(block) {
+{/* @ts-ignore */ }
+export function renderBlock(block: BlockType) {
   const { type, id } = block;
   const value = block[type];
 
@@ -12,38 +13,42 @@ export function renderBlock(block) {
     case 'paragraph':
       return (
         <p>
-          <Text title={value.rich_text} />
+          <Text text={value.rich_text} />
         </p>
       );
     case 'heading_1':
       return (
         <h1>
-          <Text title={value.rich_text} />
+          <Text text={value.rich_text} />
         </h1>
       );
     case 'heading_2':
       return (
         <h2>
-          <Text title={value.rich_text} />
+          <Text text={value.rich_text} />
         </h2>
       );
     case 'heading_3':
       return (
         <h3>
-          <Text title={value.rich_text} />
+          <Text text={value.rich_text} />
         </h3>
       );
     case 'bulleted_list': {
+      {/* @ts-ignore */ }
+
       return <ul>{value.children.map((child) => renderBlock(child))}</ul>;
     }
     case 'numbered_list': {
+      {/* @ts-ignore */ }
+
       return <ol>{value.children.map((child) => renderBlock(child))}</ol>;
     }
     case 'bulleted_list_item':
     case 'numbered_list_item':
       return (
         <li key={block.id}>
-          <Text title={value.rich_text} />
+          <Text text={value.rich_text} />
           {/* eslint-disable-next-line no-use-before-define */}
           {!!value.children && renderNestedList(block)}
         </li>
@@ -54,7 +59,7 @@ export function renderBlock(block) {
           <label htmlFor={id}>
             <input type="checkbox" id={id} defaultChecked={value.checked} />
             {' '}
-            <Text title={value.rich_text} />
+            <Text text={value.rich_text} />
           </label>
         </div>
       );
@@ -62,8 +67,9 @@ export function renderBlock(block) {
       return (
         <details>
           <summary>
-            <Text title={value.rich_text} />
+            <Text text={value.rich_text} />
           </summary>
+          {/* @ts-ignore */}
           {block.children?.map((child) => (
             <Fragment key={child.id}>{renderBlock(child)}</Fragment>
           ))}
@@ -73,6 +79,8 @@ export function renderBlock(block) {
       return (
         <div className={styles.childPage}>
           <strong>{value?.title}</strong>
+          {/* @ts-ignore */}
+
           {block.children.map((child) => renderBlock(child))}
         </div>
       );
@@ -128,14 +136,16 @@ export function renderBlock(block) {
       return (
         <table className={styles.table}>
           <tbody>
+            {/* @ts-ignore */}
             {block.children?.map((child, index) => {
               const RowElement = value.has_column_header && index === 0 ? 'th' : 'td';
               return (
                 <tr key={child.id}>
+                  {/* @ts-ignore */}
                   {child.table_row?.cells?.map((cell, i) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <RowElement key={`${cell.plain_text}-${i}`}>
-                      <Text title={cell} />
+                      <Text text={cell} />
                     </RowElement>
                   ))}
                 </tr>
@@ -148,20 +158,21 @@ export function renderBlock(block) {
     case 'column_list': {
       return (
         <div className={styles.row}>
+          {/* @ts-ignore */}
           {block.children.map((childBlock) => renderBlock(childBlock))}
         </div>
       );
     }
     case 'column': {
+      // @ts-ignore
       return <div>{block.children.map((child) => renderBlock(child))}</div>;
     }
     default:
-      return `❌ Unsupported block (${
-        type === 'unsupported' ? 'unsupported by Notion API' : type
-      })`;
+      return `❌ Unsupported block (${type === 'unsupported' ? 'unsupported by Notion API' : type
+        })`;
   }
 }
-
+// @ts-ignore
 export function renderNestedList(blocks) {
   const { type } = blocks;
   const value = blocks[type];
@@ -170,7 +181,9 @@ export function renderNestedList(blocks) {
   const isNumberedList = value.children[0].type === 'numbered_list_item';
 
   if (isNumberedList) {
+    // @ts-ignore
     return <ol>{value.children.map((block) => renderBlock(block))}</ol>;
   }
+  // @ts-ignore
   return <ul>{value.children.map((block) => renderBlock(block))}</ul>;
 }

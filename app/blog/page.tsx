@@ -4,8 +4,6 @@ import { getDatabase } from "../../lib/notion"
 import Title from "../../components/Title";
 import { Input } from "../../components/ui/Input";
 
-export const databaseId =
-  process.env?.NOTION_DATABASE_ID ?? "NOTION_DATABASE_ID";
 
 async function getPosts() {
   const database = await getDatabase();
@@ -37,7 +35,7 @@ export default async function Home() {
                 <p className="text-slate-400">{date}</p>
                 <h3>
                   <Link href={`/blog/${slug}`}>
-                    <Text title={post.properties?.Name.title} />
+                    <Text text={post.properties?.Name.title} />
                   </Link>
                 </h3>
                 <Link hidden href={`/blog/${slug}`}>Read post →</Link>

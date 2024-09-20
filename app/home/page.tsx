@@ -2,9 +2,9 @@
 import Image from "next/image"
 import Title from "../../components/Title"
 import profile from '../../public/bg.jpg'
-import Footer from "../../Footer";
-import Work from "../../components/Home/Work";
-import Project from "../../components/Home/Project";
+import Footer from "../../components/Footer";
+import Work from "../../components/home/Work";
+import Project from "../../components/home/Project";
 import Layout from "../../components/Layout";
 
 interface pageProps {
