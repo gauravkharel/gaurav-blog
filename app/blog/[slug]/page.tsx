@@ -1,83 +1,59 @@
-import { Fragment } from 'react';
-import Head from 'next/head';
+import { Metadata } from 'next';
 import Link from 'next/link';
-
-import {
-  getBlocks, getPageFromSlug
-} from '../../../lib/notion';
+import { notFound } from 'next/navigation';
+import { getBlocks, getPageFromSlug } from '../../../lib/notion';
 import Text from '../../../components/Text';
 import { renderBlock } from '../../../components/notion/Renderer';
-import styles from '../../../styles/post.module.css';
-import { BlockObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
-// Return a list of `params` to populate the [slug] dynamic segment
-// export async function generateStaticParams() {
-//   const database = await getDatabase();
-//   return database?.map((page) => {
-//     const slug = page.properties.Slug?.formula?.string;
-//     return ({ id: page.id, slug });
-//   });
-// }
-
-
-//@ts-ignore
-export default async function Page({ params }) {
-  const page = await getPageFromSlug(params?.slug);
-  //@ts-ignore
-  const blocks = await getBlocks(page?.id);
-
-  if (!page || !blocks) {
-    return <div />;
+function getPageTitle(page: PageObjectResponse): string {
+  const titleProperty = page.properties['Name'];
+  if (titleProperty && titleProperty.type === 'title' && titleProperty.title.length > 0) {
+    return titleProperty.title[0].plain_text;
   }
-
-  return (
-    <div>
-      <Head>
-        {/* @ts-ignore */}
-        <title className='text-xl font-medium'>{page.properties.Title?.title[0].plain_text}</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <article className={styles.container}>
-        <h1 className={styles.name}>
-          {/* @ts-ignore */}
-          <Text title={page.properties.Title?.title} />
-        </h1>
-        <section>
-          {/* @ts-ignore */}
-          {blocks.map((block) => (
-            <Fragment key={block.id}>{renderBlock(block)}</Fragment>
-          ))}
-          <Link href="/home" className={styles.back}>
-            ← Go home
-          </Link>
-        </section>
-      </article>
-    </div>
-  );
+  return 'Untitled';
 }
 
-// export const getStaticPaths = async () => {
-//   const database = await getDatabase(databaseId);
-//   return {
-//     paths: database.map((page) => {
-//       const slug = page.properties.Slug?.formula?.string;
-//       return ({ params: { id: page.id, slug } });
-//     }),
-//     fallback: true,
-//   };
-// };
+function getPageDescription(page: PageObjectResponse): string {
+  const descriptionProperty = page.properties['Description'];
+  if (descriptionProperty && descriptionProperty.type === 'rich_text' && descriptionProperty.rich_text.length > 0) {
+    return descriptionProperty.rich_text[0].plain_text;
+  }
+  return '';
+}
 
-// export const getStaticProps = async (context) => {
-//   const { slug } = context.params;
-//   const page = await getPage(id);
-//   const blocks = await getBlocks(id);
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const page = await getPageFromSlug(params.slug);
+  if (!page) return {};
+  
+  const title = getPageTitle(page);
+  const description = getPageDescription(page);
+  
+  return { title, description };
+}
 
-//   return {
-//     props: {
-//       page,
-//       blocks,
-//     },
-//     revalidate: 1,
-//   };
-// };
+export default async function BlogPost({ params }: { params: { slug: string } }) {
+  const page = await getPageFromSlug(params.slug);
+  if (!page) notFound();
+
+  const blocks = await getBlocks(page.id);
+  const title = getPageTitle(page);
+  const description = getPageDescription(page);
+
+  return (
+    <article className="max-w-2xl mx-auto px-4 py-12">
+      <h1 className="text-4xl font-bold mb-4">{title}</h1>
+      {description && (
+        <p className="text-xl text-gray-600 mb-8">{description}</p>
+      )}
+      <div className="prose dark:prose-invert max-w-none">
+        {blocks.map((block) => (
+          <div key={block.id}>{renderBlock(block)}</div>
+        ))}
+      </div>
+      <Link href="/blog" className="inline-block mt-8 text-blue-600 hover:underline">
+        ← Back to blog
+      </Link>
+    </article>
+  );
+}

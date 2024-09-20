@@ -1,36 +1,33 @@
-import type { TextRichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+import { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
 
 interface TextProps {
-  text: TextRichTextItemResponse[];
+  text: RichTextItemResponse[];
 }
 
 export default function Text({ text }: TextProps) {
-  if (!text || text.length === 0) {
-    return null;
-  }
+  if (!text) return null;
 
   return (
-    <div>
+    <>
       {text.map((value) => {
         const {
           annotations: { bold, code, color, italic, strikethrough, underline },
           text,
         } = value;
-
         return (
           <span
             key={text.content}
             className={`
               ${bold ? "font-bold" : ""}
+              ${code ? "font-mono bg-gray-100 dark:bg-gray-800 p-1 rounded" : ""}
               ${italic ? "italic" : ""}
-              ${underline ? "underline" : ""}
               ${strikethrough ? "line-through" : ""}
-              ${code ? "font-mono bg-gray-100 p-1 rounded" : ""}
-              ${color !== "default" ? `text-${color}` : ""}
+              ${underline ? "underline" : ""}
+              ${color !== "default" ? `text-${color}-600 dark:text-${color}-400` : ""}
             `}
           >
             {text.link ? (
-              <a href={text.link.url} className="text-blue-500 underline">
+              <a href={text.link.url} className="text-blue-600 dark:text-blue-400 hover:underline">
                 {text.content}
               </a>
             ) : (
@@ -39,6 +36,6 @@ export default function Text({ text }: TextProps) {
           </span>
         );
       })}
-    </div>
+    </>
   );
 }

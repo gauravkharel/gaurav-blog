@@ -1,37 +1,14 @@
 import { Client } from "@notionhq/client";
-import type { BlockObjectRequest, BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints"
-
+import { BlockObjectResponse, PageObjectResponse, PartialPageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { cache } from "react";
+
 export const revalidate = 3600; // revalidate the data at most every hour
 
-const databaseId = process.env.NOTION_DATABASE_ID!
-
-/**
- * Returns a random integer between the specified values, inclusive.
- * The value is no lower than `min`, and is less than or equal to `max`.
- *
- * @param {number} minimum - The smallest integer value that can be returned, inclusive.
- * @param {number} maximum - The largest integer value that can be returned, inclusive.
- * @returns {number} - A random integer between `min` and `max`, inclusive.
- */
-type Values = {
-  minimum: number;
-  maximum: number;
-  blockId: string;
-  pageId: string;
-};
-
-function getRandomInt({ minimum, maximum }: Values) {
-  const min = Math.ceil(minimum);
-  const max = Math.floor(maximum);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const databaseId = process.env.NOTION_DATABASE_ID!;
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
-
-
 
 export const getDatabase = cache(async () => {
   const response = await notion.databases.query({
@@ -40,7 +17,7 @@ export const getDatabase = cache(async () => {
   return response.results;
 });
 
-export const getPage = cache(async ({ pageId }: Values) => {
+export const getPage = cache(async (pageId: string) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
   return response;
 });
@@ -58,85 +35,24 @@ export const getPageFromSlug = cache(async (slug: string) => {
     },
   });
   if (response?.results?.length) {
-    return response?.results?.[0];
+    return response.results[0] as PageObjectResponse;
   }
-  return {};
+  return null;
 });
 
-
-// export const searchPages = cache(async (query:string) => {
-//   const response = await notion.databases.query({
-//     filter: {
-//       and: [
-//         {
-//           property: "Name",
-//           formula: {
-//             string: {
-//               equals: query,
-//             },
-//           },
-//         },
-//       ],
-//     },
-//     sort: {
-//       direction: "ascending",
-//       timestamp: "last_edited_time",
-//     }
-//   });
-//   console.log("Response :" + response);
-// });
-
-//@ts-ignore
-export const getBlocks = cache(async (blockID) => {
-  const blockId = blockID.replaceAll("-", "");
-
-  const { results } = await notion.blocks.children.list({
-    block_id: blockId,
-    page_size: 100,
-  });
-
-  // Fetches all child blocks recursively
-  // be mindful of rate limits if you have large amounts of nested blocks
-  // See https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
-  //@ts-ignore
-  const childBlocks = results.map(async (block) => {
-    //@ts-ignore
-    if (block.has_children) {
-      //@ts-ignore
-      const children = await getBlocks(block.id);
-      return { ...block, children };
+export const getBlocks = cache(async (blockId: string): Promise<BlockObjectResponse[]> => {
+  const blocks = [];
+  let cursor;
+  while (true) {
+    const { results, next_cursor } = await notion.blocks.children.list({
+      start_cursor: cursor,
+      block_id: blockId,
+    });
+    blocks.push(...results);
+    if (!next_cursor) {
+      break;
     }
-    return block;
-  });
-
-  return Promise.all(childBlocks).then((blocks) =>
-    blocks.reduce((acc, curr) => {
-      if (curr.type === "bulleted_list_item") {
-        if (acc[acc.length - 1]?.type === "bulleted_list") {
-          acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
-        } else {
-          acc.push({
-            //@ts-ignore
-            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
-            type: "bulleted_list",
-            bulleted_list: { children: [curr] },
-          });
-        }
-      } else if (curr.type === "numbered_list_item") {
-        if (acc[acc.length - 1]?.type === "numbered_list") {
-          acc[acc.length - 1][acc[acc.length - 1].type].children?.push(curr);
-        } else {
-          acc.push({
-            //@ts-ignore
-            id: getRandomInt(10 ** 99, 10 ** 100).toString(),
-            type: "numbered_list",
-            numbered_list: { children: [curr] },
-          });
-        }
-      } else {
-        acc.push(curr);
-      }
-      return acc;
-    }, [])
-  );
+    cursor = next_cursor;
+  }
+  return blocks as BlockObjectResponse[];
 });
