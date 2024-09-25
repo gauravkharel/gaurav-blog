@@ -41,10 +41,10 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   const description = getPageDescription(page);
 
   return (
-    <article className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold mb-4">{title}</h1>
+    <article className="max-w-2xl mx-auto">
+      <h1 className="font-bold mb-4">{title}</h1>
       {description && (
-        <p className="text-xl text-gray-600 mb-8">{description}</p>
+        <p className="text-gray-600 mb-8">{description}</p>
       )}
       <div className="prose dark:prose-invert max-w-none">
         {blocks.map((block) => (

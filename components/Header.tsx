@@ -16,12 +16,10 @@ const Navbar = () => {
   const pathname = usePathname()
   return (
     <header className="py-2 sticky dark:bg-dark">
-      <nav
-        className="container mx-auto flex justify-between items-center "
-      >
-        <div className="hidden md:flex">
+      <nav className="container mx-auto flex justify-between items-center">
+        <Link href={'/'} className="hidden md:flex">
           <Image alt="logo" width={24} height={24} src="/logo.svg" />
-        </div>
+        </Link>
         <ul className="flex space-x-4">
           {links.map((link) => {
             const isActive = pathname.startsWith(link.href)
@@ -31,7 +29,7 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               </li>
-            )
+            ) 
           }
           )}
         </ul>

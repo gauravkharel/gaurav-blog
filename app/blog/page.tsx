@@ -33,11 +33,11 @@ export default async function Home() {
             return (
               <li key={post.id} className="flex gap-8 mt-4 ">
                 <p className="text-slate-400">{date}</p>
-                <h3>
+                <h1 className="font-light">
                   <Link href={`/blog/${slug}`}>
                     <Text text={post.properties?.Name.title} />
                   </Link>
-                </h3>
+                </h1>
                 <Link hidden href={`/blog/${slug}`}>Read post →</Link>
               </li>
             );

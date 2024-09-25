@@ -10,7 +10,7 @@ export const metadata = {
   title: 'Gaurav Kharel - Develop Interfaces',
   description: 'Developing Interfaces',
   content: 'width=device-width',
-  initialscale: "1.0" 
+  initialscale: "1.0"
 }
 interface RootLayoutProps {
   children: ReactNode
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="px:4 sm:px-4 md:px-8 lg:px-[400px] text-sm md:text-md lg:text-lg">
+          <div className="px:4 sm:px-4 md:px-8 lg:px-[500px] text-sm md:text-md lg:text-lg">
             <Navbar />
             {children}
           </div>
@@ -36,4 +36,3 @@ export default function RootLayout({ children }: RootLayoutProps) {
 }
 
 
-// px-4 sm:px-8 md:px-10 lg:px-[500px] xl:px-[00px] 2xl:px-[1200px]

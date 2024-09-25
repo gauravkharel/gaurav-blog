@@ -27,10 +27,10 @@
                                       {experience.description}
                                   </p>
                                   <div>
-                                      <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Technologies Used:</h4>
+                                      {/* <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Tech:</h4> */}
                                       <div className="flex flex-wrap gap-2">
                                           {experience.tech_used.map((tech, index) => (
-                                              <span key={index} className="px-2 py-1 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md text-sm">
+                                              <span key={index} className="px-2 py-1 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-md ">
                                                   {tech}
                                               </span>
                                           ))}
