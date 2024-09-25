@@ -12,7 +12,8 @@ export default function Text({ text }: TextProps) {
       {text.map((value) => {
         const {
           annotations: { bold, code, color, italic, strikethrough, underline },
-          text,
+          // @ts-ignore
+          text
         } = value;
         return (
           <span

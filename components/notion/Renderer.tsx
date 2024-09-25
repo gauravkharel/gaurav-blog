@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import Text from '../Text';
 import styles from '../../styles/post.module.css';
+import Image from 'next/image';
 
 export function renderBlock(block: BlockObjectResponse) {
   const { type, id } = block;
@@ -68,7 +69,7 @@ export function renderBlock(block: BlockObjectResponse) {
       const caption = block.image.caption ? block.image.caption[0]?.plain_text : '';
       return (
         <figure className="my-6">
-          <img src={src} alt={caption} className="rounded-lg shadow-md" />
+          <Image src={src} alt={caption} className="rounded-lg shadow-md" />
           {caption && <figcaption className="text-center text-sm mt-2 text-gray-600">{caption}</figcaption>}
         </figure>
       );

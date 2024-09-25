@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getBlocks, getPageFromSlug } from '../../../lib/notion';
-import Text from '../../../components/Text';
 import { renderBlock } from '../../../components/notion/Renderer';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
