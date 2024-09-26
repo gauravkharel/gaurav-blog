@@ -6,18 +6,16 @@ interface TextProps {
 
 export default function Text({ text }: TextProps) {
   if (!text) return null;
-
   return (
     <>
-      {text.map((value) => {
+      {text.map((value, index) => {
         const {
           annotations: { bold, code, color, italic, strikethrough, underline },
-          // @ts-ignore
           text
         } = value;
         return (
           <span
-            key={text.content}
+            key={index}
             className={`
               ${bold ? "font-bold" : ""}
               ${code ? "font-mono bg-gray-100 dark:bg-gray-800 p-1 rounded" : ""}

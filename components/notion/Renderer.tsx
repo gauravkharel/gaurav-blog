@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import Link from 'next/link';
-import { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
+import { BlockObjectResponse, RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
 import Text from '../Text';
 import styles from '../../styles/post.module.css';
 import Image from 'next/image';
@@ -33,10 +33,15 @@ export function renderBlock(block: BlockObjectResponse) {
         </h3>
       );
     case 'bulleted_list_item':
+      return (
+        <li className="ml-6 mb-1">
+          <Text text={block.bulleted_list_item.rich_text} />
+        </li>
+      );
     case 'numbered_list_item':
       return (
         <li className="ml-6 mb-1">
-          <Text text={block[type].rich_text} />
+          <Text text={block.numbered_list_item.rich_text} />
         </li>
       );
     case 'to_do':
