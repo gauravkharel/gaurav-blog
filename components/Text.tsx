@@ -11,8 +11,10 @@ export default function Text({ text }: TextProps) {
       {text.map((value, index) => {
         const {
           annotations: { bold, code, color, italic, strikethrough, underline },
-          text
+          plain_text,
+          href
         } = value;
+
         return (
           <span
             key={index}
@@ -25,12 +27,12 @@ export default function Text({ text }: TextProps) {
               ${color !== "default" ? `text-${color}-600 dark:text-${color}-400` : ""}
             `}
           >
-            {text.link ? (
-              <a href={text.link.url} className="text-blue-600 dark:text-blue-400 hover:underline">
-                {text.content}
+            {href ? (
+              <a href={href} className="text-blue-600 dark:text-blue-400 hover:underline">
+                {plain_text}
               </a>
             ) : (
-              text.content
+              plain_text
             )}
           </span>
         );
