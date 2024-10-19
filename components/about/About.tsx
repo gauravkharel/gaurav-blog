@@ -9,17 +9,21 @@ import logo from "../../public/logo.svg"
 import Title from '../Title'
 import Link from 'next/link'
 import Footer from '../Footer'
-
+import pappu from '../../public/pappu.jpg'
+import trail from '../../public/pic.jpg'
+import motions from '../../public/image.jpg'
+import potrait from '../../public/potrait.jpeg'
+import workspace from '../../public/workspace.jpg'
 type FlipCardType = {
   image: string | StaticImageData,
   pattern: string,
 }
 
 const images = [
-  { key: 1, src: profile, pattern: 'pattern1' },
-  { key: 2, src: profile, pattern: 'pattern2' },
-  { key: 3, src: profile, pattern: 'pattern3' },
-  { key: 4, src: profile, pattern: 'pattern4' },
+  { key: 1, src: workspace, pattern: 'pattern1' },
+  { key: 2, src: trail, pattern: 'pattern2' },
+  { key: 3, src: motions, pattern: 'pattern3' },
+  { key: 4, src: potrait, pattern: 'pattern4' },
 ]
 
 const FlipCard = ({ image, pattern }: FlipCardType) => {
