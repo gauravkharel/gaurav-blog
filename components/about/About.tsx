@@ -14,6 +14,7 @@ import trail from '../../public/pic.jpg'
 import motions from '../../public/image.jpg'
 import potrait from '../../public/potrait.jpeg'
 import workspace from '../../public/workspace.jpg'
+
 type FlipCardType = {
   image: string | StaticImageData,
   pattern: string,
@@ -25,6 +26,21 @@ const images = [
   { key: 3, src: motions, pattern: 'pattern3' },
   { key: 4, src: potrait, pattern: 'pattern4' },
 ]
+
+const projects = [
+  {
+    name: "Tathya Ecommerce Project",
+    description: "Worked on it from this to that.",
+    image: pappu,
+    project_url: 'https://tathya.com.np',
+  },
+  {
+    name: "Another Cool Project",
+    description: "Some details about the project.",
+    image: workspace,
+    project_url: 'https://tathya.com.np',
+  }
+];
 
 const FlipCard = ({ image, pattern }: FlipCardType) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
@@ -71,8 +87,8 @@ export default function Portfolio() {
   const [isHover, setIsHover] = useState<boolean>(true)
   return (
     <div className='px-3 pt-4'>
-      <div className="hidden md:flex lg:flex  container mx-auto px-8 pb-[50px]">
-        <div className=" flex flex-row justify-center items-center space-x-4">
+      <div className="hidden md:flex lg:flex container mx-auto px-8 pb-[50px]">
+        <div className="flex flex-row justify-center items-center space-x-4">
           {images.map(image => (
             <FlipCard key={image.key} image={image.src} pattern={image.pattern} />
           ))}
@@ -89,38 +105,56 @@ export default function Portfolio() {
         </div>
         <div>
           <span className='font-medium'>
-            Hi, I’m Gaurav, a designer and frontend developer hybrid passionate about building products with delightful interfaces. <br /><br />
+            Hi, I'm Gaurav, a designer and frontend developer hybrid passionate about building products with delightful interfaces. <br /><br />
             I enjoy collaborating with startups that care deeply about their users, ensuring both functionality and a polished look and feel for the product. <br /><br />
             Originally from the beautiful plains of Nepal, near the Himalayas, I also spent part of my life in Kathmandu. <br /><br />
-            Outside of design and code, I explore behavioral economics and am deeply invested in fitness, particularly running. <br />   <br />
+            Outside of design and code, I explore behavioral economics and am deeply invested in fitness, particularly running. <br /><br />
           </span>
         </div>
       </div>
-      <div className='flex flex-col lg:flex-row gap-4 lg:gap-[100px]'>
-        <div className='items-end'>
-          <Title isPrimary={false} props={'Projects'} />
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-[100px]">
+        <div className="flex items-first">
+          <Title isPrimary={false} props={"Projects"} />
         </div>
+
         <div className="flex flex-col gap-5">
+          {projects.map((project, index) => (
+            <Link 
+              href={project.project_url} 
+              key={index} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <motion.div 
+                whileHover={{ x: 5 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="flex flex-row gap-6 items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
+              >
+                {/* Circular Image with subtle border */}
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 group-hover:border-gray-300 dark:group-hover:border-gray-600 transition-colors">
+                  <Image
+                    src={project.image}
+                    fill
+                    className="object-cover"
+                    alt={project.name}
+                  />
+                </div>
 
-          <div
-            className='flex flex-row gap-6'
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}
-          >
-            <div className='border-1 rounded-full items-end'>
-              <Image src={profile} width={40} height={40} className="rounded-full aspect-square object-cover" alt='what'></Image>
-            </div>
-            <div className='flex flex-col gap-3 *:item-start'>
-              <div className='font-bold text-gray-500'>Tathya Ecommerce Project</div>
-              <span className='font-medium text-gray-500'>Worked on it from this to that.</span>
-            </div>
-            <div>
-            </div>
-          </div>
-
+                <div className="flex flex-col gap-1">
+                  <div className="font-bold text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                    {project.name}
+                  </div>
+                  <span className="font-medium text-gray-500 dark:text-gray-400">
+                    {project.description}
+                  </span>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
         </div>
-
       </div>
+
       <Footer></Footer>
     </div>
   )
