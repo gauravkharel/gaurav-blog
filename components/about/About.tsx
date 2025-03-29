@@ -89,7 +89,7 @@ export default function Portfolio() {
         </div>
         <div>
           <span className='font-medium'>
-            Hi, I’m Gaurav—a designer and frontend developer hybrid passionate about building products with delightful interfaces. <br /><br />
+            Hi, I’m Gaurav, a designer and frontend developer hybrid passionate about building products with delightful interfaces. <br /><br />
             I enjoy collaborating with startups that care deeply about their users, ensuring both functionality and a polished look and feel for the product. <br /><br />
             Originally from the beautiful plains of Nepal, near the Himalayas, I also spent part of my life in Kathmandu. <br /><br />
             Outside of design and code, I explore behavioral economics and am deeply invested in fitness, particularly running. <br />   <br />
@@ -121,7 +121,7 @@ export default function Portfolio() {
         </div>
 
       </div>
-          <Footer></Footer>
+      <Footer></Footer>
     </div>
   )
 }

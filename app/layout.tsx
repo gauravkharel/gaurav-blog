@@ -9,30 +9,29 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   title: 'Gaurav Kharel - Develop Interfaces',
   description: 'Developing Interfaces',
-  content: 'width=device-width',
-  initialscale: "1.0"
+  content: 'width=device-width, initial-scale=1.0'
 }
+
 interface RootLayoutProps {
   children: ReactNode
 }
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className={inter.className} >
+      <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <div className="px:4 sm:px-4 md:px-8 lg:px-[500px] text-sm md:text-md lg:text-lg">
+          <div className="w-full px-4 sm:px-4 md:px-8 lg:px-[500px] text-sm md:text-md lg:text-lg">
             <Navbar />
             {children}
           </div>
-        </ ThemeProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
 }
-
-
