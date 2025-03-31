@@ -9,11 +9,12 @@ import logo from "../../public/logo.svg"
 import Title from '../Title'
 import Link from 'next/link'
 import Footer from '../Footer'
-import pappu from '../../public/pappu.jpg'
 import trail from '../../public/pic.jpg'
 import motions from '../../public/image.jpg'
 import potrait from '../../public/potrait.jpeg'
 import workspace from '../../public/workspace.jpg'
+import { projects } from '../../lib/mock'
+import pappu from '../public/pappu.jpg'
 
 type FlipCardType = {
   image: string | StaticImageData,
@@ -27,20 +28,7 @@ const images = [
   { key: 4, src: potrait, pattern: 'pattern4' },
 ]
 
-const projects = [
-  {
-    name: "Tathya Ecommerce Project",
-    description: "Worked on it from this to that.",
-    image: pappu,
-    project_url: 'https://tathya.com.np',
-  },
-  {
-    name: "Another Cool Project",
-    description: "Some details about the project.",
-    image: workspace,
-    project_url: 'https://tathya.com.np',
-  }
-];
+
 
 const FlipCard = ({ image, pattern }: FlipCardType) => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false)

@@ -6,6 +6,7 @@ import igv from '../../public/client_landing.jpg'
 import loginproshore from '../../public/login_form_bootcamp.jpg'
 import priv from '../../public/priv.jpg'
 import jobtrack from '../../public/jobtrack.png'
+import teleshowcase from '../../public/tele_showcase1.jpg'
 const projects = [
   {
     image_url: jsoninput,
@@ -15,9 +16,9 @@ const projects = [
     width: 'col-span-2 md:col-span-1 lg:col-span-2'
   },
   {
-    image_url: igv,
-    name: 'iGV Client Landing Page',
-    desc: 'Landing page for iGV client',
+    image_url: teleshowcase,
+    name: 'Tele-health',
+    desc: 'SASS Design',
     date: '2025',
     width: 'col-span-1'
   },

@@ -27,9 +27,23 @@ const Project = () => {
               <div className="flex-1 space-y-3">
                 <div className="space-y-2">
                   <Title isPrimary={true} props={project.project_title} />
-                  <motion.p className="text-gray-600 dark:text-gray-100 leading-relaxed">
+                  
+                  {/* Keywords Section */}
+
+                  <motion.p className="text-gray-600 relative bottom- dark:text-gray-100 leading-relaxed">
                     {project.desc}
                   </motion.p>
+                 
+                  <div className="flex flex-wrap gap-2 pb-3">
+                    {project.keywords.map((keyword, i) => (
+                      <span 
+                        key={i} 
+                        className="px-5 py-1 font-normal text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-800 rounded-full"
+                      >
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
                 </div>
 
                 <motion.div
@@ -40,8 +54,8 @@ const Project = () => {
                   }}
                 >
                   <Image 
-                    className="rounded-lg"
-                    src={project.image_url} 
+                    className="rounded-lg w-full h-auto"
+                    src={project.gif_url} 
                     alt={project.project_title} 
                     width={600} 
                     height={400}
